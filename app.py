@@ -11,6 +11,7 @@ from PIL import Image
 import io
 import json
 from typing import Dict, Any
+import os
 
 app = FastAPI(
     title="Healthcare AI Platform",
@@ -18,13 +19,24 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Global model placeholder - in production this loads your trained model
+# Global model placeholder - lightweight for Railway deployment
 model = None
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
+
+# Mock model responses for Railway deployment (no large model files)
+MOCK_RESPONSES = {
+    "epic_hyperspace": {
+        "software": "Epic Hyperspace",
+        "department": "Nursing",
+        "workflow": "MAR",
+        "confidence": 0.9802,
+        "accuracy": "98.02%"
+    }
+}
 
 @app.on_event("startup")
 async def startup_event():
