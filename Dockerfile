@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Copy and install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu -r requirements.txt \
+RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch==2.1.2+cpu torchvision==0.16.2+cpu \
+    && pip install --no-cache-dir -r requirements.txt \
     && pip cache purge \
     && rm -rf /root/.cache/pip
 
